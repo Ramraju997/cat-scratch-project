@@ -5,14 +5,9 @@ import { dataContext } from "../App";
 
 
 export default function PreviewArea() {
-  const { translate, rotate } = useContext(dataContext);
-
+  const { translate, rotate, containerRef } = useContext(dataContext);
   return (
-    <div className="flex-none h-full p-2" 
-    style={{
-      transform: `translate(${translate.x}px, ${translate.y}px)`,
-    }}
-    >
+    <div ref={containerRef} className="flex-none h-full p-2 w-full" >
       <CatSprite />
     </div>
   );
