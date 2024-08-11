@@ -9,6 +9,25 @@ export const DataProvider = ({children}) => {
 const [translate, setTranslate] = useState({ x: 0, y: 0 });
 const [rotate, setRotate] = useState(0);
 const containerRef = useRef(null);
+const [moveOnClick, setMoveOnClick] = useState(false);
+const [eventClick, setEventClick] = useState(false);
+
+const enableMoveOnClick = () => {
+  setMoveOnClick(true);
+};
+
+const disableMoveOnClick = () => {
+  setMoveOnClick(false);
+};
+
+const enableEventClick = () => {
+  setEventClick(true);
+};
+
+const disableEventClick = () => {
+  setEventClick(false);
+};
+
 const increment = ()=>{
   if (!containerRef.current) return;
     const container = containerRef.current;
@@ -32,8 +51,13 @@ const rotateDecrement = () => {
   setRotate(rotate - 15);
 }
 
+const rotateInverse = () => {
+  setRotate(rotate + 180);
+}
+
 return (
-  <dataContext.Provider value={{ translate, increment, rotate, rotateIncrement, rotateDecrement, containerRef }}>
+  <dataContext.Provider value={{ translate, increment, rotate, rotateIncrement, rotateDecrement,
+   containerRef, enableMoveOnClick, disableMoveOnClick, moveOnClick, eventClick, enableEventClick, disableEventClick, rotateInverse}}>
       {children}
     </dataContext.Provider>
 )
