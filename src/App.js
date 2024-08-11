@@ -2,18 +2,26 @@ import React from "react";
 import Sidebar from "./components/Sidebar";
 import MidArea from "./components/MidArea";
 import PreviewArea from "./components/PreviewArea";
-import  {createContext, useContext, useState} from "react";
+import  {createContext, useContext, useState,useRef} from "react";
 export const dataContext = createContext(null);
 
 export const DataProvider = ({children}) => {
 const [translate, setTranslate] = useState({ x: 0, y: 0 });
 const [rotate, setRotate] = useState(0);
+const containerRef = useRef(null);
 const increment = ()=>{
-  debugger;
-  const angleInRadians = (rotate * Math.PI) / 180;
-  const newX = translate.x + 10 * Math.cos(angleInRadians);
-  const newY = translate.y + 10 * Math.sin(angleInRadians);
-  setTranslate({ x: newX, y: newY });
+  if (!containerRef.current) return;
+    const container = containerRef.current;
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+    const angleInRadians = (rotate * Math.PI) / 180;
+    const deltaX = 10 * Math.cos(angleInRadians);
+    const deltaY = 10 * Math.sin(angleInRadians);
+    const newX = translate.x + deltaX;
+    const newY = translate.y + deltaY;
+    const boundedX = Math.max(0, Math.min(newX, containerWidth - 95)); 
+    const boundedY = Math.max(0, Math.min(newY, containerHeight - 100));
+    setTranslate({ x: boundedX, y: boundedY });
 }
 
 const rotateIncrement = () => {
@@ -25,7 +33,7 @@ const rotateDecrement = () => {
 }
 
 return (
-  <dataContext.Provider value={{ translate, increment, rotate, rotateIncrement, rotateDecrement }}>
+  <dataContext.Provider value={{ translate, increment, rotate, rotateIncrement, rotateDecrement, containerRef }}>
       {children}
     </dataContext.Provider>
 )
